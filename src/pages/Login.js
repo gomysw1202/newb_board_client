@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function Login() {
 
     const [userid, setUserid] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
         
     const onUserIdHandler = (event) => {
         setUserid(event.currentTarget.value);
@@ -28,7 +30,7 @@ export default function Login() {
         axios.post("/login", data)
             .then((resp) => {
                 if(resp.status === 200) {
-                    console.log(resp.data)
+                    navigate('/main');
                 }
             }).catch((err) => {
                 alert("아이디 혹은 비밀번호가 틀렸습니다" + err)
