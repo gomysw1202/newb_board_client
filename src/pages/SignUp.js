@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 
@@ -7,15 +8,16 @@ export default function Register() {
     const [userid, setUserid] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    
+    const navigate = useNavigate();
+
     const onUserIdHandler = (event) => {
         setUserid(event.currentTarget.value);
-    }
-    
+}
+
     const onPasswordHandler = (event) => {
         setPassword(event.currentTarget.value);
-    }
-    
+            }
+
     const onConfirmPasswordHandler = (event) => {
         setConfirmPassword(event.currentTarget.value);
     }
@@ -37,7 +39,8 @@ export default function Register() {
         axios.post("/signUp", data)
             .then((resp) => {
                 if(resp.status === 200) {
-                    console.log(resp.data)
+                    navigate('/login');
+                    console.log(resp.data);
                 }
             }).catch((err) => {
                 alert("회원가입실패" + err)
@@ -59,6 +62,7 @@ export default function Register() {
         </>
         
     )
+    
 
 }; 
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
 export default function Login() {
@@ -19,16 +19,16 @@ export default function Login() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
+        
         let data = {
             userid: userid,
             passwd: password
         };
 
-        console.log(data);
-
         axios.post("/login", data)
             .then((resp) => {
+
+                debugger;
                 if(resp.status === 200) {
                     navigate('/main');
                 }
@@ -47,7 +47,7 @@ export default function Login() {
                 <input type="password" name="passwd" value={password} onChange={onPasswordHandler}></input>
                 <button>로그인</button>
             </form>
-            <a href="/register">회원가입</a>
+            <Link to="/SignUp" >회원가입</Link>
             <br/>
             <a href="#">비밀번호 찾기</a>
         </>
