@@ -17,6 +17,8 @@ export default function Login() {
     }
     
 
+    
+
     const handleSubmit = (event) => {
         event.preventDefault();
         
@@ -29,7 +31,7 @@ export default function Login() {
             .then((resp) => {
 
                 debugger;
-                if(resp.status === 200) {
+                if(resp.data === 200) {
                     navigate('/main');
                 }
             }).catch((err) => {
