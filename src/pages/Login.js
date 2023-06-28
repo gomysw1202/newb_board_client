@@ -29,10 +29,9 @@ export default function Login() {
 
         axios.post("/login", data)
             .then((resp) => {
-
-                debugger;
-                if(resp.data === 200) {
-                    navigate('/main');
+                debugger
+                if(resp.status === 200) {
+                    navigate('/');
                 }
             }).catch((err) => {
                 alert("아이디 혹은 비밀번호가 틀렸습니다" + err)

@@ -4,7 +4,7 @@ export default function Main() {
 
     return (
         <>
-            <Link to="/boardList">게시판</Link>
+            <Link to="/board/list">게시판</Link>
             <br></br>
             <Link to="/commentList">댓글</Link>
         </>
