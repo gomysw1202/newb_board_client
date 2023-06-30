@@ -19,6 +19,9 @@ const BoardList = () => {
     getBoardList();
   }, []);
 
+
+  
+
   return (
     <>
         <table className="table table-hover">
@@ -44,7 +47,7 @@ const BoardList = () => {
 			</table>
 
 			<div>
-				<Link to="/board/write"><i className="fas fa-pen"></i> &nbsp; 글쓰기</Link>
+				<Link to="/board/write">글쓰기</Link>
 			</div>
     
     </>

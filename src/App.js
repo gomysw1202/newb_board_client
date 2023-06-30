@@ -6,6 +6,7 @@ import Main from "./pages/Main.js";
 import BoardList from "./pages/BoardList";  
 import BoardDetail from './pages/BoardDetail';   
 import BoardWrite from './pages/BoardWrite';   
+import BoardModify from './pages/BoardModify'
 
 export default function App() {
   return (
@@ -17,8 +18,8 @@ export default function App() {
           <Route path="/SignUp" element={<SignUp />}/>
           <Route path="/board/list" element={<BoardList/>}/>
           <Route path="/board/:boardNum" element={<BoardDetail/>}/>
-          <Route path="/board/write/:boardNum" element={<BoardWrite/>}/>
-          
+          <Route path="/board/write" element={<BoardWrite/>}/>
+          <Route path="/board/modify" element={<BoardModify/>}/>
         </Routes>
       </Router>
     </>

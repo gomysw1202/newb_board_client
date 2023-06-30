@@ -29,7 +29,6 @@ export default function Login() {
 
         axios.post("/login", data)
             .then((resp) => {
-                debugger
                 if(resp.status === 200) {
                     navigate('/');
                 }

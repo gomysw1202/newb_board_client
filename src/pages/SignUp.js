@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -9,7 +9,7 @@ export default function Register() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [email, setEmail] = useState("");
-    let idCheck = false;
+
     const navigate = useNavigate();
 
     const onUserIdHandler = (event) => {
@@ -29,9 +29,8 @@ export default function Register() {
 
 
 
-    useEffect(() => {
-        idCheck = false;
-      }, [onUserIdHandler]);
+    // useEffect(() => {
+    // }, [onUserIdHandler]);
 
 
     const checkIdDuplicate = () => {
@@ -45,7 +44,6 @@ export default function Register() {
  
             if(resp.data === false) {
                 alert('사용 가능한 아이디 입니다.')
-                idCheck = true;
                 
             }else{
                 alert('중복된 아이디 입니다.')
@@ -76,7 +74,6 @@ export default function Register() {
             .then((resp) => {
                 if(resp.status === 200) {
                     navigate('/login');
-                    debugger
                 }
             }).catch((err) => {
                 alert("회원가입실패, 다시 시도 해주세요" + err)

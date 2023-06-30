@@ -1,42 +1,18 @@
 import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 
 function BoardWrite() {
 
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    // const [board, setBoard] = useState({});
+    const location = useLocation();
+    const { board } = location.state;
+    
+    const [title, setTitle] = useState(board.title);
+    const [content, setContent] = useState(board.content);
     const navigate = useNavigate();
 
-    
-    // const getBoardDetail = async () => {
-
         
-	// 	await axios.get(`/board/${boardNum}`)
-	// 	.then((resp) => {
-	// 		console.log("[BoardDetail.js] getBoardDetail() success :D");
-	// 		console.log(resp.data);
-            
-	// 		const board = resp.data;
-    //         setContent(board.content);
-    //         setTitle(board.title);
-	// 	})
-	// 	.catch((err) => {
-	// 		console.log("[BoardDetail.js] getBoardDetail() error :<");
-	// 		console.log(err);
-	// 	});
-
-	// }
-
-    // useEffect(() => {
-    //     console.log(boardNum)
-    //     getBoardDetail();
-    //     }, []);
-    
-
-
     const onTitleHandler = (event) => {
         setTitle(event.currentTarget.value);
     }   
@@ -49,21 +25,20 @@ function BoardWrite() {
         event.preventDefault();
         
         let data = {
-            // fkUserid: fkUserid,
+            boardNum: board.boardNum,
             title: title,
             content: content,
         };
 
         console.log(data);
 
-        axios.post("/board/write", data)
+        axios.patch('/board/modify', data)
             .then((resp) => {
                 if(resp.status === 200) {
-                    navigate('/board/list');
-                    
+                    navigate(`/board/${board.boardNum}`);
                 }
             }).catch((err) => {
-                alert("글등록실패, 다시 시도 해주세요" + err)
+                alert("글수정실패, 다시 시도 해주세요" + err)
             });
     }       
 
