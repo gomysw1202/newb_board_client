@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useState } from "react";
+import CommentWrite from "./CommentWrite";
 
 function Comment(props) {
     const comment = props.obj;
     const commentReRender = props.commentReRender;
 
-    const [show, setShow] = useState(false);
+    const [showModify, setShowModify] = useState(false);
+    const [showReply, setShowReply] = useState(false);
 
     const [content, setContent] = useState(comment.content);
 
@@ -15,7 +17,7 @@ function Comment(props) {
 
     const handleDeleteBnt = async () => {
 
-        await axios.delete(`/comment/delete`, comment.commentNum).then((resp) => {
+        await axios.patch(`/comment/delete`, null, { params: { commentNum: comment.commentNum } }).then((resp) => {
             console.log("[Comment.js] handleDeleteBnt() success :D");
 			console.log(resp.data);
 
@@ -38,7 +40,7 @@ function Comment(props) {
         await axios.patch('/comment/modify', data).then((resp) => {
             console.log("[Comment.js] handleModifyBnt() success :D");
 			console.log(resp.data);
-            setShow(show => !show);
+            setShowModify(showModify => !showModify);
             commentReRender();
 
 
@@ -49,7 +51,11 @@ function Comment(props) {
     }
 
     function ModifyToggle() { 
-		setShow(show => !show) 
+		setShowModify(showModify => !showModify) 
+	}
+
+    function reCommentToggle() { 
+		setShowReply(showReply => !showReply) 
 	}
 
 
@@ -58,7 +64,7 @@ function Comment(props) {
         <>
 
         {
-            show ? 
+            showModify ? 
             <>
                 <div>
 
@@ -73,14 +79,14 @@ function Comment(props) {
                     <span>{content}</span>
                     <span>{comment.fkUserid}</span>
                     <span>{comment.writeDate}</span>
+                    <button type="button" onClick={ModifyToggle}>수정</button>
+                    <button type="button" onClick={handleDeleteBnt}>삭제</button>
+                    <button type="button" onClick={reCommentToggle} >답글달기</button>
+                    <CommentWrite/>
                 </div>
             </>
         }
 
-            <div>
-                <button type="button" onClick={ModifyToggle}>수정</button>
-                <button type="button" onClick={handleDeleteBnt}>삭제</button>
-            </div>
         </>
     )
 }

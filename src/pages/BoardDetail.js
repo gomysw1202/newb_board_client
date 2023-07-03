@@ -46,7 +46,7 @@ function BoardDetail() {
 	}, []);
 
     const handleDeleteBnt = async () => {
-        await axios.delete(`/board/delete/${boardNum}`).then((resp) => {
+        await axios.patch(`/board/delete/${boardNum}`).then((resp) => {
             console.log("[BoardDetail.js] handleDeleteBnt() success :D");
 			console.log(resp.data);
 
