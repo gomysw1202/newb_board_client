@@ -21,9 +21,10 @@ const BoardList = () => {
   
   const getBoardList = async() => {
 
-    await axios.get("/board/list" )
+    await axios.get("/board/list")
     .then((resp) => {
         setBoardList(resp.data);
+
     }).catch((err) => {
         console.log('[BoardList.js] useEffect() error :<' + err)
     });
@@ -89,7 +90,7 @@ const BoardList = () => {
 
 			<div>
 				<Link to="/board/write">글쓰기</Link>
-        <button onClick={() => getBoardList({ fkUserid: 'ss' })}>내 게시글</button>
+        <button onClick={() => getBoardList()}>내 게시글</button>
         <button onClick={() => getCommentList({ fkUserid: 'limsw' })}>내 댓글</button>
     
       </div>
