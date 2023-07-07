@@ -1,7 +1,6 @@
-import { useState,useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "../components/axiosInstance.js";
-
+import axios from "axios";
 
 export default function Login() {
 
@@ -17,10 +16,8 @@ export default function Login() {
         setPassword(event.currentTarget.value);
     }
     
-    useEffect(() => {
 
-        console.log(window.location.origin)
-      }, []);
+    
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -33,8 +30,6 @@ export default function Login() {
         axios.post("/login", data)
             .then((resp) => {
                 if(resp.status === 200) {
-                    console.log(resp.data.access_token)
-                    localStorage.setItem("access-token", resp.data.access_token)
                     navigate('/main');
                 }
             }).catch((err) => {

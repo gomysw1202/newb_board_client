@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import axios from "../components/axiosInstance.js";
+import axios from "axios";
 
 import {Link } from "react-router-dom";
 
@@ -23,7 +23,7 @@ const BoardList = () => {
 
     await axios.get("/board/list")
     .then((resp) => {
-        setBoardList();
+        setBoardList(resp.data);
 
     }).catch((err) => {
         console.log('[BoardList.js] useEffect() error :<' + err)
