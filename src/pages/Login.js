@@ -49,7 +49,7 @@ export default function Login() {
             </form>
             <Link to="/SignUp" >회원가입</Link>
             <br/>
-            <a href="#">비밀번호 찾기</a>
+           비밀번호 찾기
         </>
         
     )
