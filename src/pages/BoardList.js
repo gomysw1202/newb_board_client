@@ -1,29 +1,28 @@
 import React, {useState, useEffect} from 'react';
 import axios from "axios";
 
-import {Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 const BoardList = () => {
 
+    const userid = sessionStorage.getItem("userid");
+
     const [boardList, setBoardList] = useState([]);
     const [commentList, setCommentList] = useState([]);
+    const [myContent, setMyContent] = useState(false);
 
-  //   const getBoardList = async({fkUserid}) => {
-
-  //       await axios.get("/board/list", { params: {fkUserid} } )
-  //       .then((resp) => {
-  //           setBoardList(resp.data);
-  //       }).catch((err) => {
-  //           console.log('[BoardList.js] useEffect() error :<' + err)
-  //       });
-      
-  // }
-  
   const getBoardList = async() => {
-
-    await axios.get("/board/list")
+    let userid="";
+    if(myContent) {
+      userid = sessionStorage.getItem("userid");
+    }else {
+      userid = ""
+    }
+  
+    await axios.get("/board/list", { params: { userid: userid } })
     .then((resp) => {
-        setBoardList(resp.data);
+      console.log(resp.data);
+      setBoardList(resp.data);
 
     }).catch((err) => {
         console.log('[BoardList.js] useEffect() error :<' + err)
@@ -32,11 +31,11 @@ const BoardList = () => {
 }
   useEffect(() => {
     getBoardList();
-  }, []);
+  }, [myContent]);
 
 
-  const getCommentList = async ({fkUserid}) => {
-		await axios.get(`/comment/list`, { params: { fkUserid} } )
+  const getCommentList = async () => {
+		await axios.get(`/comment/list`, { params: { userid : userid} } )
 			.then((resp) => {
 				console.log("[BoardDetail.js] getCommentList() success :D");
 				console.log(resp.data);
@@ -48,20 +47,10 @@ const BoardList = () => {
 			});
 	}
 
-  // const updateOpenYN = async () => {
-	// 	await axios.patch(`/comment/updateOpenYN` )
-	// 		.then((resp) => {
-	// 			console.log("[BoardDetail.js] updateOpenYN() success :D");
-	// 			console.log(resp.data);
-				
-	// 			getCommentList();
-	// 		}).catch((err) => {
-	// 			console.log("[BoardDetail.js] updateOpenYN() error :<");
-	// 			console.log(err);
-	// 		});
-	// }
+  function myContentToggle() { 
+    setMyContent(myContent => !myContent);
+  }
 
-  
 
   return (
     <>
@@ -81,7 +70,7 @@ const BoardList = () => {
           {
               boardList && boardList.map(function (obj, idx) {
                 return (
-                  <TableRow obj={obj} key={idx} cnt={idx + 1} />
+                  <TableRow obj={obj} key={idx} cnt={idx + 1}/>
                 )
               })
             }
@@ -90,9 +79,8 @@ const BoardList = () => {
 
 			<div>
 				<Link to="/board/write">글쓰기</Link>
-        <button onClick={() => getBoardList()}>내 게시글</button>
-        <button onClick={() => getCommentList({ fkUserid: 'limsw' })}>내 댓글</button>
-    
+        <button onClick={myContentToggle}>{myContent === true ? '전체 게시글' : '내 게시글'}</button>
+        <button onClick={() => getCommentList({ fkUserid: 'limsw' })}>나에게 달린 댓글</button>
       </div>
     </>
     
@@ -102,6 +90,7 @@ const BoardList = () => {
 
 
 function TableRow(props) {
+  const userid = sessionStorage.getItem("userid");
 	const board = props.obj;
 
 	return (
@@ -117,10 +106,32 @@ function TableRow(props) {
                 <th>{board.fkUserid}</th>
                 <th>{board.writeDate}</th>
                 <th>{board.views}</th>
-                {/* <th><button onClick={() => updateOpenYN()}>비공개</button></th> */}
+                <th>
+                {userid === board.fkUserid && (<button onClick={() => openCloseContent(board)}>{board.open === 'Y' ? '비공개' : '공개'}</button>)}
+                </th>
               </tr>
 );
 }
+
+const openCloseContent = async (props) => {
+  const open = props.open === 'Y' ? 'N' : 'Y';
+
+  if(window.confirm("게시글을 비공개/공개 처리하시겠습니까?")){
+    await axios.post('/board/openClose', { open: open, boardNum: props.boardNum} ).then((resp) => {
+      console.log(resp.data);
+
+      alert("게시글이 비공개/공개 처리 되었습니다.");
+
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+  else{
+    return;
+  }
+
+}
+
 
 
 export default BoardList;

@@ -17,8 +17,6 @@ export default function Login() {
     }
     
 
-    
-
     const handleSubmit = (event) => {
         event.preventDefault();
         
@@ -29,7 +27,9 @@ export default function Login() {
 
         axios.post("/login", data)
             .then((resp) => {
-                if(resp.status === 200) {
+                if(resp.data === true) {
+                    console.log(resp.data);
+                    sessionStorage.setItem("userid", data.userid);
                     navigate('/main');
                 }
             }).catch((err) => {
@@ -49,7 +49,7 @@ export default function Login() {
             </form>
             <Link to="/SignUp" >회원가입</Link>
             <br/>
-           비밀번호 찾기
+            비밀번호 찾기
         </>
         
     )

@@ -5,7 +5,7 @@ import CommentWrite from "./CommentWrite";
 import axios from "axios";
 function BoardDetail() {
 
-    // const { auth, setAuth } = useContext(AuthContext)
+	const userid = sessionStorage.getItem("userid");
 
 	const { boardNum } = useParams(); // 파라미터 가져오기
 	const [board, setBoard] = useState({});
@@ -46,18 +46,45 @@ function BoardDetail() {
 	}, []);
 
     const handleDeleteBnt = async () => {
-        await axios.patch(`/board/delete/${boardNum}`).then((resp) => {
-            console.log("[BoardDetail.js] handleDeleteBnt() success :D");
-			console.log(resp.data);
-
-            alert('delete가 정상적으로 되었는지 확인하는 로직을 구현해야함. 일단 상태 코드 200');
-
-            navigate("/board/list");
-        }).catch((err) => {
-            console.log("[BoardDetail.js] handleDeleteBnt() error :<");
-			console.log(err);
-        });
+		if(window.confirm("게시글을 정말로 삭제하시겠습니까?")){
+			await axios.patch(`/board/delete/${boardNum}`).then((resp) => {
+				console.log("[BoardDetail.js] handleDeleteBnt() success :D");
+				console.log(resp.data);
+	
+				alert("게시글이 삭제되었습니다.");
+	
+				navigate("/board/list");
+			}).catch((err) => {
+				console.log("[BoardDetail.js] handleDeleteBnt() error :<");
+				console.log(err);
+			});
+		}
+		else{
+			return;
+		}
     }
+
+
+	const openCloseContent = async () => {
+
+		const open = board.open === 'Y' ? 'N' : 'Y';
+
+		if(window.confirm("게시글을 비공개/공개 처리하시겠습니까?")){
+			await axios.post('/board/openClose', { open: open, boardNum: boardNum} ).then((resp) => {
+				console.log(resp.data);
+	
+				alert("게시글이 비공개/공개 처리 되었습니다.");
+	
+				navigate("/board/list");
+			}).catch((err) => {
+				console.log(err);
+			});
+		}
+		else{
+			return;
+		}
+    }
+	
 
 
     const boardModify = {
@@ -66,6 +93,8 @@ function BoardDetail() {
 		title: board.title,
 		content: board.content
 	}
+
+	
 
     return (
         <>
@@ -108,10 +137,23 @@ function BoardDetail() {
 						</td>
 					</tr>
 				</tbody>
-            <Link to={`/board/modify`} state={{board: boardModify}} >수정</Link>
-            <button type='button' onClick={handleDeleteBnt}>삭제</button>
-
 			</table>
+
+				{userid === board.fkUserid && (
+					<>
+						<Link to={`/board/modify`} state={{ board: boardModify }}>수정</Link>
+						<button type='button' onClick={handleDeleteBnt}>삭제</button>
+						
+						{board.open === 'Y' ? (
+							<button type='button' onClick={openCloseContent}>비공개 처리</button>
+							) : (
+							<button type='button' onClick={openCloseContent}>공개 처리</button>
+						)}
+						
+					</>
+				)}
+
+			
 
             <CommentWrite boardNum={boardNum} commentReRender={getCommentList}></CommentWrite>
             <CommentList commentList = {commentList} commentReRender={getCommentList}/>

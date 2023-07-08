@@ -3,6 +3,7 @@ import { useState } from "react";
 import CommentWrite from "./CommentWrite";
 
 function Comment(props) {
+    const userid = sessionStorage.getItem("userid");
     const comment = props.obj;
     const commentReRender = props.commentReRender;
 
@@ -25,7 +26,6 @@ function Comment(props) {
 
             commentReRender();
         }).catch((err) => {
-            console.log("[Comment.js] handleDeleteBnt() error :<");
 			console.log(err);
         });
     }
@@ -38,12 +38,8 @@ function Comment(props) {
         }
 
         await axios.patch('/comment/modify', data).then((resp) => {
-            console.log("[Comment.js] handleModifyBnt() success :D");
-			console.log(resp.data);
             setShowModify(showModify => !showModify);
             commentReRender();
-
-
         }).catch((err) => {
             console.log("[Comment.js] handleModifyBnt() error :<");
 			console.log(err);
@@ -67,10 +63,8 @@ function Comment(props) {
             showModify ? 
             <>
                 <div>
-
                     <textarea value={content} onChange={onContentHandler}></textarea>
                     <button type="button" onClick={handleModifyBnt}>수정완료</button>
-
                 </div>
             </>
                 :   
@@ -79,10 +73,14 @@ function Comment(props) {
                     <span>{content}</span>
                     <span>{comment.fkUserid}</span>
                     <span>{comment.writeDate}</span>
-                    <button type="button" onClick={ModifyToggle}>수정</button>
-                    <button type="button" onClick={handleDeleteBnt}>삭제</button>
-                    <button type="button" onClick={reCommentToggle} >답글달기</button>
-                    <CommentWrite/>
+                    { userid === comment.fkUserid && (
+                        <>
+                            <button type="button" onClick={ModifyToggle}>수정</button>
+                            <button type="button" onClick={handleDeleteBnt}>삭제</button>
+                        </>
+				    )}
+                    
+                    
                 </div>
             </>
         }

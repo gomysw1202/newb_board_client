@@ -33,15 +33,12 @@ export default function Register() {
     // }, [onUserIdHandler]);
 
 
-    const checkIdDuplicate = () => {
+    const idDuplicateCheck = () => {
 
-        let data = {
-            userid: userid,
-        };
-
-        axios.post('/checkIdDuplicate', data)
+    
+        axios.get('/idDuplicateCheck', { params: { userid: userid } })
         .then((resp) => {
- 
+
             if(resp.data === false) {
                 alert('사용 가능한 아이디 입니다.')
                 
@@ -73,6 +70,7 @@ export default function Register() {
         axios.post("/signUp", data)
             .then((resp) => {
                 if(resp.status === 200) {
+                    alert("회원가입 성공!");
                     navigate('/login');
                 }
             }).catch((err) => {
@@ -85,7 +83,8 @@ export default function Register() {
             <h2>회원가입</h2>
             <form onSubmit={handleSubmit}>
                 <label>아이디</label>
-                <input type='text' value={userid} onChange={onUserIdHandler}/><button type="button" onClick={checkIdDuplicate}>중복확인</button>
+                <input type='text' value={userid} onChange={onUserIdHandler}/>
+                <button type="button" onClick={idDuplicateCheck}>중복확인</button>
                 <label>비밀번호</label>
                 <input type="password" value={password} onChange={onPasswordHandler}/>
                 <label>비밀번호 확인</label>

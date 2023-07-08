@@ -5,37 +5,11 @@ import axios from "axios";
 
 function BoardWrite() {
 
+    const userid = sessionStorage.getItem("userid");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     // const [board, setBoard] = useState({});
     const navigate = useNavigate();
-
-    
-    // const getBoardDetail = async () => {
-
-        
-	// 	await axios.get(`/board/${boardNum}`)
-	// 	.then((resp) => {
-	// 		console.log("[BoardDetail.js] getBoardDetail() success :D");
-	// 		console.log(resp.data);
-            
-	// 		const board = resp.data;
-    //         setContent(board.content);
-    //         setTitle(board.title);
-	// 	})
-	// 	.catch((err) => {
-	// 		console.log("[BoardDetail.js] getBoardDetail() error :<");
-	// 		console.log(err);
-	// 	});
-
-	// }
-
-    // useEffect(() => {
-    //     console.log(boardNum)
-    //     getBoardDetail();
-    //     }, []);
-    
-
 
     const onTitleHandler = (event) => {
         setTitle(event.currentTarget.value);
@@ -45,22 +19,23 @@ function BoardWrite() {
         setContent(event.currentTarget.value);
     }
 
+    const moveTolist = (event) => {
+        navigate('/board/list');
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
         
         let data = {
-            // fkUserid: fkUserid,
+            fkUserid: userid,
             title: title,
             content: content,
         };
-
-        console.log(data);
 
         axios.post("/board/write", data)
             .then((resp) => {
                 if(resp.status === 200) {
                     navigate('/board/list');
-                    
                 }
             }).catch((err) => {
                 alert("글등록실패, 다시 시도 해주세요" + err)
@@ -74,12 +49,12 @@ function BoardWrite() {
         <form onSubmit={handleSubmit}>
             <table >
 				<tbody>
-					{/* <tr>
+					<tr>
 						<th >작성자</th>
 						<td>
-							<input type="text" value={localStorage.getItem("id")} size="50px" readOnly />
+							<span>{userid}</span>
 						</td>
-					</tr> */}
+					</tr>
 
 					<tr>
 						<th >제목</th>
@@ -101,6 +76,8 @@ function BoardWrite() {
 				<button>글쓰기</button>
 			</div>
         </form>
+
+        <button type="button" onClick={moveTolist}>취소</button>
         </>
     )
     

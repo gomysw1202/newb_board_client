@@ -5,6 +5,8 @@ import axios from "axios";
 
 function BoardWrite() {
 
+    const userid = sessionStorage.getItem("userid");
+
     const location = useLocation();
     const { board } = location.state;
     
@@ -19,6 +21,10 @@ function BoardWrite() {
 
     const onContentHandler = (event) => {
         setContent(event.currentTarget.value);
+    }
+
+    const moveTolist = (event) => {
+        navigate('/board/list');
     }
 
     const handleSubmit = (event) => {
@@ -49,12 +55,12 @@ function BoardWrite() {
         <form onSubmit={handleSubmit}>
             <table >
 				<tbody>
-					{/* <tr>
+                <tr>
 						<th >작성자</th>
 						<td>
-							<input type="text" value={localStorage.getItem("id")} size="50px" readOnly />
+							<span>{userid}</span>
 						</td>
-					</tr> */}
+					</tr>
 
 					<tr>
 						<th >제목</th>
@@ -76,6 +82,9 @@ function BoardWrite() {
 				<button>글쓰기</button>
 			</div>
         </form>
+
+        
+        <button type="button" onClick={moveTolist}>취소</button>
         </>
     )
     

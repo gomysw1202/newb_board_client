@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 
 function CommentWrite(props) {
+    const userid = sessionStorage.getItem("userid");
 
     const fkBoardNum = props.boardNum;
     const commentReRender = props.commentReRender;
@@ -15,9 +16,9 @@ function CommentWrite(props) {
         event.preventDefault();
         
         let data = {
+            fkUserid: userid,
             fkBoardNum : fkBoardNum,
             content: content,
-            fkUserid: 'limsw',
         };
 
         console.log(data);
