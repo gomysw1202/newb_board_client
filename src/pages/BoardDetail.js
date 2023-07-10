@@ -97,67 +97,68 @@ function BoardDetail() {
 	
 
     return (
-        <>
-            <table>
-				<tbody>
-					<tr>
-						<th>작성자</th>
-						<td>
-							<span>{board.fkUserid}</span>
-						</td>
-					</tr>
+	<>
+	<h2>게시물 상세보기</h2>
+		<div className="board-details">
+			<table>
+			<tbody>
+				<tr>
+				<th>작성자</th>
+				<td>
+					<span>{board.fkUserid}</span>
+				</td>
+				</tr>
 
-					<tr>
-						<th>제목</th>
-						<td>
-							<span>{board.title}</span>
-						</td>
-					</tr>
+				<tr>
+				<th>작성일</th>
+				<td>
+					<span>{board.writeDate}</span>
+				</td>
+				</tr>
 
-					<tr>
-						<th>작성일</th>
-						<td>
-							<span>{board.writeDate}</span>
-						</td>
-					</tr>
+				<tr>
+				<th>조회수</th>
+				<td>
+					<span>{board.views}</span>
+				</td>
+				</tr>
 
-					<tr>
-						<th>조회수</th>
-						<td>
-							<span>{board.views}</span>
-						</td>
-					</tr>
+				<tr>
+				<th>제목</th>
+				<td>
+					<span>{board.title}</span>
+				</td>
+				</tr>
 
-					<tr>
-						<th>내용</th>
-						<td>
-							<div>
-								{board.content}
-							</div>
-						</td>
-					</tr>
-				</tbody>
+				<tr>
+				<th>내용</th>
+				<td>
+					<div>{board.content}</div>
+				</td>
+				</tr>
+			</tbody>
 			</table>
 
-				{userid === board.fkUserid && (
-					<>
-						<Link to={`/board/modify`} state={{ board: boardModify }}>수정</Link>
-						<button type='button' onClick={handleDeleteBnt}>삭제</button>
-						
-						{board.open === 'Y' ? (
-							<button type='button' onClick={openCloseContent}>비공개 처리</button>
-							) : (
-							<button type='button' onClick={openCloseContent}>공개 처리</button>
-						)}
-						
-					</>
-				)}
+			{userid === board.fkUserid && (
+			<div className="board-actions">
+				<Link to={`/board/modify`} state={{ board: boardModify }}>수정</Link>
+				<button type='button' onClick={handleDeleteBnt}>삭제</button>
+				
+				<button
+				type='button'
+				onClick={openCloseContent}
+				className={board.open === 'Y' ? 'close-button' : 'open-button'}
+				>
+				{board.open === 'Y' ? '비공개 처리' : '공개 처리'}
+				</button>
+			</div>
+			)}
+			<Link to="/board/list">목록으로</Link>
+		</div>
 
-			
-
-            <CommentWrite boardNum={boardNum} commentReRender={getCommentList}></CommentWrite>
-            <CommentList commentList = {commentList} commentReRender={getCommentList}/>
-        </>
+		<CommentWrite boardNum={boardNum} commentReRender={getCommentList} />
+		<CommentList commentList={commentList} commentReRender={getCommentList} />
+	</>
         
     )
 };

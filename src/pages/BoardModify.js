@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
@@ -14,6 +14,14 @@ function BoardWrite() {
     const [content, setContent] = useState(board.content);
     const navigate = useNavigate();
 
+
+
+    useEffect(() => {
+        if (!userid) {
+          navigate("/login"); // 리다이렉트할 경로를 설정해주세요
+        }
+    }, [navigate]);
+      
         
     const onTitleHandler = (event) => {
         setTitle(event.currentTarget.value);
@@ -51,9 +59,10 @@ function BoardWrite() {
 
     return (
         <>
-
+<div className="centered-form">
+  <div className="form-container">
         <form onSubmit={handleSubmit}>
-            <table >
+            <table className="form-table">
 				<tbody>
                 <tr>
 						<th >작성자</th>
@@ -78,13 +87,16 @@ function BoardWrite() {
 				</tbody>
 			</table>
 
-			<div >
-				<button>글쓰기</button>
+			<div  className="form-buttons" >
+				<button>글 수정</button>
+                <button type="button" onClick={moveTolist}>취소</button>
 			</div>
         </form>
 
         
-        <button type="button" onClick={moveTolist}>취소</button>
+      
+        </div>
+    </div>
         </>
     )
     

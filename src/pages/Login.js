@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import '../styles/login.css';
 
 export default function Login() {
 
@@ -30,7 +31,7 @@ export default function Login() {
                 if(resp.data === true) {
                     console.log(resp.data);
                     sessionStorage.setItem("userid", data.userid);
-                    navigate('/main');
+                    navigate('/board/list');
                 }
             }).catch((err) => {
                 alert("아이디 혹은 비밀번호가 틀렸습니다" + err)
@@ -39,7 +40,8 @@ export default function Login() {
 
     return (
         <>
-            <h2>로그인</h2>
+        <div className="login-container">
+        <h2>로그인</h2>
             <form onSubmit={handleSubmit}>
                 <label>아이디</label>
                 <input type="text" name="userid" value={userid} onChange={onUserIdHandler}></input>
@@ -48,8 +50,12 @@ export default function Login() {
                 <button>로그인</button>
             </form>
             <Link to="/SignUp" >회원가입</Link>
+            <Link to="/findPwd" >비밀번호 찾기</Link>
             <br/>
-            비밀번호 찾기
+            
+            
+
+        </div>
         </>
         
     )

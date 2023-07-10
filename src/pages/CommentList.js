@@ -1,12 +1,10 @@
 import Comment from "./Comment.js"
-
+import '../styles/comment.css';
 
 function CommentList({commentList, commentReRender}) {
-    
-
     return (
         <>
-			<div>댓글 목록</div>
+			<h4>댓글 목록</h4>
             {
                 commentList && commentList.map(function (comment, idx) {
 					return (

@@ -15,6 +15,11 @@ function CommentWrite(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
         
+        if (!content.trim()) {
+            alert("댓글을 입력해주세요.");
+            return;
+        }
+
         let data = {
             fkUserid: userid,
             fkBoardNum : fkBoardNum,
@@ -41,9 +46,11 @@ function CommentWrite(props) {
 
     return (
         <>	
+        <h4>댓글 달기</h4>
+        <div className="comment-form">
             <textarea value={content} onChange={onContentHandler}></textarea>
             <button type="button" onClick={handleSubmit}>댓글등록</button>
-            
+        </div>
         </>
 	)
 }

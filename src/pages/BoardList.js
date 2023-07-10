@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from "axios";
-
-import {Link} from "react-router-dom";
-
+import { useNavigate, Link } from "react-router-dom";
+import '../styles/board.css';
 const BoardList = () => {
 
     const userid = sessionStorage.getItem("userid");
@@ -10,6 +9,8 @@ const BoardList = () => {
     const [boardList, setBoardList] = useState([]);
     const [commentList, setCommentList] = useState([]);
     const [myContent, setMyContent] = useState(false);
+
+    const navigate = useNavigate();
 
   const getBoardList = async() => {
     let userid="";
@@ -29,6 +30,13 @@ const BoardList = () => {
     });
   
 }
+
+useEffect(() => {
+  if (!userid) {
+    navigate("/login"); // 리다이렉트할 경로를 설정해주세요
+  }
+}, [navigate]);
+
   useEffect(() => {
     getBoardList();
   }, [myContent]);
@@ -52,21 +60,32 @@ const BoardList = () => {
   }
 
 
+  const logout = () => {
+    sessionStorage.clear();
+    navigate("/login");
+  }
+
   return (
     <>
-        <table className="table table-hover">
-				<thead>
-					<tr>
-						<th>번호</th>
-						<th>제목</th>
-						<th>작성자</th>
-						<th>작성일자</th>
+      <div className="button-group">
+        <Link to="/board/write" className="button">글쓰기</Link>
+        <button onClick={myContentToggle} className="button">{myContent ? '전체 게시글' : '내 게시글'}</button>
+        <button onClick={() => getCommentList({ fkUserid: 'limsw' })} className="button">나에게 달린 댓글</button>
+        <button onClick={logout} className="button">로그아웃</button>
+      </div>
+      <table className="table table-hover">
+        <thead>
+          <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일자</th>
             <th>조회수</th>
-						<th></th>
-					</tr>
-				</thead>
+            <th></th>
+          </tr>
+        </thead>
 
-				<tbody>
+        <tbody>
           {
               boardList && boardList.map(function (obj, idx) {
                 return (
@@ -75,13 +94,8 @@ const BoardList = () => {
               })
             }
         </tbody>
-			</table>
+      </table>
 
-			<div>
-				<Link to="/board/write">글쓰기</Link>
-        <button onClick={myContentToggle}>{myContent === true ? '전체 게시글' : '내 게시글'}</button>
-        <button onClick={() => getCommentList({ fkUserid: 'limsw' })}>나에게 달린 댓글</button>
-      </div>
     </>
     
     
@@ -95,20 +109,20 @@ function TableRow(props) {
 
 	return (
               <tr>
-                <th>{props.cnt}</th>
-                <th >
-                  {board.open === 'N' && (<span>비공개</span>)}
-                    <Link to={`/board/${board.boardNum}` }> { /* 게시글 상세 링크 */}
+                <td>{props.cnt}</td>
+                <td>
+                  {board.open === 'N' && (<span className='hide'>비공개</span>)}
+                    <Link to={`/board/${board.boardNum}`} className="link-style"> { /* 게시글 상세 링크 */}
                       <span >{board.title}  </span> { /* 게시글 제목 */}
                     </Link>
                   {board.commentCnt !== 0 && (<span>[{board.commentCnt}]</span>)}
-                </th>
-                <th>{board.fkUserid}</th>
-                <th>{board.writeDate}</th>
-                <th>{board.views}</th>
-                <th>
+                </td>
+                <td>{board.fkUserid}</td>
+                <td>{board.writeDate}</td>
+                <td>{board.views}</td>
+                <td>
                 {userid === board.fkUserid && (<button onClick={() => openCloseContent(board)}>{board.open === 'Y' ? '비공개' : '공개'}</button>)}
-                </th>
+                </td>
               </tr>
 );
 }
