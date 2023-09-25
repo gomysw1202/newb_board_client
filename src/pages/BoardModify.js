@@ -5,6 +5,8 @@ import axios from "axios";
 
 function BoardWrite() {
 
+    const userid = sessionStorage.getItem("userid");
+
     const location = useLocation();
     const { board } = location.state;
     
